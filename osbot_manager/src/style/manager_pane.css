@@ -1,0 +1,104 @@
+.button {
+    -fx-background-color: #3C3C3C;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-width: 0 0 0 0;
+    -fx-padding:0;
+}
+
+.button:hover {
+    -fx-text-fill: #33b5e5;
+}
+
+ManagerPane, ToolBar {
+    -fx-background-color: #3C3C3C;
+    -fx-text-fill: #FFFFFF;
+}
+
+Label {
+    -fx-text-fill:#FFFFFF;
+}
+
+.table-view, .table-cell, .table-row-cell {
+    -fx-background-color:transparent;
+    -fx-text-fill:#FFFFFF;
+}
+
+.table-view .column-header .label{
+    -fx-alignment:top-left;
+}
+
+.table-view .filler {
+    -fx-background-color:transparent;
+}
+
+.column-header-background, .column-header {
+    -fx-background-color:transparent;
+}
+
+.column-header .label {
+    -fx-text-fill:#FFFFFF;
+}
+
+.table-row-cell{
+    -fx-text-fill:#FFFFFF;
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color:transparent;
+    -fx-border-color: #4F4F4F;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-row-cell:filled:selected {
+  -fx-background-color: #33b5e5;
+}
+
+.table-row-cell:filled:hover {
+  -fx-background-color: #33b5e5;
+}
+
+.tab-pane, .tab-header-area, .tab-header-background {
+    -fx-background-color: #3C3C3C;
+}
+
+.tab-header-area, .tab-header-background {
+    -fx-background-color: #33b5e5;
+}
+
+.tab-header-area {
+    -fx-padding: 1 0 0 0;
+}
+
+.tab-header-background {
+    -fx-border-width: 1 0 1 0;
+    -fx-border-color: #FFFFFF;
+}
+
+.tab-content-area {
+    -fx-padding: 10 5 0 5;
+}
+
+.tab {
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+    -fx-padding: 2 15 2 15;
+    -fx-border: none;
+}
+
+.tab, .tab-label {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-text-fill: #3C3C3C;
+    -fx-font-size: 14px;
+}
+
+.tab:selected, .tab:hover {
+    -fx-focus-color: transparent;
+}
+
+.tab:selected {
+    -fx-background-color: #157DA2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.tab:selected .tab-label, .tab:hover .tab-label {
+    -fx-text-fill: #FFFFFF;
+}

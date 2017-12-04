@@ -1,0 +1,43 @@
+.custom-dialog, .button, .label, .check-box, .choice-box .context-menu {
+    -fx-background-color: #3C3C3C;
+    -fx-text-fill: #FFFFFF;
+}
+
+.custom-dialog:header *.header-panel {
+    -fx-background-color: #3C3C3C;
+    -fx-font-size: 16px;
+}
+
+.choice-box {
+    -fx-focus-color: transparent;
+}
+
+.choice-box .context-menu .label {
+    -fx-background-color:transparent;
+}
+
+.choice-box .context-menu {
+    -fx-background-color: #3C3C3C;
+    -fx-text-fill: #FFFFFF;
+    -fx-mark-color: #33b5e5;
+}
+
+.button {
+    -fx-background-color: #3C3C3C;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #FFFFFF;
+}
+
+.button:hover {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #000000;
+}
+
+.text-field {
+    -fx-background-color:transparent;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #FFFFFF;
+}
+
+

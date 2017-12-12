@@ -128,6 +128,10 @@ public class ConfigurationTab extends TableTab<Configuration> {
         MenuItem viewLogOption = new MenuItem("Show log");
         viewLogOption.setOnAction(e -> showLog());
         contextMenu.getItems().add(viewLogOption);
+
+        MenuItem viewCommandOption = new MenuItem("Show command");
+        viewCommandOption.setOnAction(e -> showCommand());
+        contextMenu.getItems().add(viewCommandOption);
     }
 
     private void start() {
@@ -173,6 +177,32 @@ public class ConfigurationTab extends TableTab<Configuration> {
             }
         });
         readFileThread.start();
+    }
+
+    private void showCommand() {
+        Configuration configuration = getTableView().getSelectionModel().getSelectedItem();
+
+        Dialog dialog = new Dialog();
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.setResizable(true);
+        dialog.initModality(Modality.NONE);
+
+        TextArea textArea = new TextArea();
+        AnchorPane.setBottomAnchor(textArea, 0.0);
+        AnchorPane.setRightAnchor(textArea, 0.0);
+        AnchorPane.setLeftAnchor(textArea, 0.0);
+        AnchorPane.setTopAnchor(textArea, 0.0);
+        AnchorPane anchorPane = new AnchorPane(textArea);
+
+        dialog.getDialogPane().setContent(anchorPane);
+
+        List<List<String>> configCommands = configuration.getCommands(botSettingsTab.getBot().getOsbotPath(), botSettingsTab.getOsBotAccount());
+
+        for (List<String> command : configCommands) {
+            textArea.appendText(String.join(" ", command) + "\n");
+        }
+
+        dialog.show();
     }
 
     private void runConfigurations(final List<Configuration> configurations) {

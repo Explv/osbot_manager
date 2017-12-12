@@ -378,15 +378,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
             try (BufferedWriter br = new BufferedWriter(new FileWriter(logFile))) {
 
-                for (final Script script : scripts.get()) {
-
-                    List<String> command = new ArrayList<>();
-
-                    Collections.addAll(command, "java", "-jar", osbotPath);
-                    Collections.addAll(command, osBotAccount.toParameterString().split(" "));
-                    Collections.addAll(command, this.toParameterString().split(" "));
-                    Collections.addAll(command, script.toParameterString().split(" "));
-
+                for (final List<String> command : getCommands(osbotPath, osBotAccount)) {
 
                     final ProcessBuilder processBuilder = new ProcessBuilder(command);
                     processBuilder.redirectErrorStream(true);
@@ -449,6 +441,24 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             }
         });
         runThread.start();
+    }
+
+    public List<List<String>> getCommands(final String osbotPath, final OSBotAccount osBotAccount) {
+
+        List<List<String>> commands = new ArrayList<>();
+
+        for (final Script script : scripts.get()) {
+            List<String> command = new ArrayList<>();
+
+            Collections.addAll(command, "java", "-jar", osbotPath);
+            Collections.addAll(command, osBotAccount.toParameterString().split(" "));
+            Collections.addAll(command, this.toParameterString().split(" "));
+            Collections.addAll(command, script.toParameterString().split(" "));
+
+            commands.add(command);
+        }
+
+        return commands;
     }
 
     public void stop() {

@@ -31,6 +31,6 @@ public final class Bot implements BotParameter, Serializable {
 
     @Override
     public String toParameterString() {
-        return "java -jar " + osbotPath;
+        return "java -jar \"" + osbotPath + "\"";
     }
 }

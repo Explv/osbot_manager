@@ -46,9 +46,11 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
     public void setIsLocal(final boolean isLocal) { this.isLocal.set(isLocal); }
 
     @Override
-    public final String toParameterString() {
-        if (isLocal.get()) return String.format("-script \"\\\"%s\\\":%s\"", scriptIdentifier.get(), parameters.get());
-        else return String.format("-script \"%s:%s\"", scriptIdentifier.get(), parameters.get());
+    public final String[] toParameter() {
+        if (isLocal.get()) {
+            return new String[] { "-script", String.format("\\\"%s\\\":%s", scriptIdentifier.get(), parameters.get()) };
+        }
+        return new String[] { "-script", String.format("%s:%s", scriptIdentifier.get(), parameters.get()) };
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {

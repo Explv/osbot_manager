@@ -1,5 +1,5 @@
 package bot_parameters.interfaces;
 
 public interface BotParameter {
-    String toParameterString();
+    String[] toParameter();
 }

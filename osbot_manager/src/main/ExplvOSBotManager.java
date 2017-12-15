@@ -50,11 +50,11 @@ public final class ExplvOSBotManager extends Application {
         label.setFont(new Font("Arial", 20));
         grid.add(label, 0, 0);
 
-        Hyperlink threadLink = new Hyperlink("Click here to update");
-        threadLink.setFont(new Font("Arial", 15));
-        threadLink.setPadding(new Insets(0, 0, 0, 0));
-        threadLink.setOnAction(e -> getHostServices().showDocument("http://osbot.org/forum/topic/100554-explvs-osbot-manager/"));
-        grid.add(threadLink, 0, 1);
+        Hyperlink updateLink = new Hyperlink("Update");
+        updateLink.setFont(new Font("Arial", 15));
+        updateLink.setPadding(new Insets(0, 0, 0, 0));
+        updateLink.setOnAction(e -> getHostServices().showDocument("https://github.com/Explv/osbot_manager/releases"));
+        grid.add(updateLink, 0, 1);
 
         dialog.showAndWait();
     }

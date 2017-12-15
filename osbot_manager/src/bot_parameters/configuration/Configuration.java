@@ -270,30 +270,32 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     }
 
     @Override
-    public final String toParameterString() {
-        String parameterString = runescapeAccount.get().toParameterString();
+    public final String[] toParameter() {
+
+        List<String> parameter = new ArrayList<>();
+
+        Collections.addAll(parameter, runescapeAccount.get().toParameter());
+
         if (proxy.get() != null) {
-            parameterString += " " + proxy.get().toParameterString();
+            Collections.addAll(parameter, proxy.get().toParameter());
         }
 
         if (memoryAllocation.get() != -1) {
-            parameterString += " -mem " + memoryAllocation.get();
+            Collections.addAll(parameter, "-mem", String.valueOf(memoryAllocation.get()));
         }
 
         if (collectData.get()) {
-            parameterString += " -data 1";
+            Collections.addAll(parameter, "-data", "1");
         }
 
         if (debugMode.get() && debugPort.get() != -1) {
-            parameterString += " -debug " + debugPort.get();
+            Collections.addAll(parameter, "-debug", String.valueOf(debugPort.get()));
         } else {
-            Optional<Integer> availablePort = getAvailablePort();
-            if (availablePort.isPresent()) {
-                parameterString += " -debug " + availablePort.get();
-            }
+            getAvailablePort().ifPresent(integer -> Collections.addAll(parameter, "-debug", String.valueOf(integer)));
         }
 
         List<String> allowParams = new ArrayList<>();
+
         if (lowResourceMode.get()) {
             allowParams.add("lowresource");
         }
@@ -314,7 +316,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         }
 
         if (!allowParams.isEmpty()) {
-            parameterString += " -allow " + String.join(",", allowParams);
+            Collections.addAll(parameter, "-allow",  String.join(",", allowParams));
         }
 
         int worldVal;
@@ -325,10 +327,10 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         }
 
         if (worldVal != -1) {
-            parameterString += " -world " + worldVal;
+            Collections.addAll(parameter, "-world", String.valueOf(worldVal));
         }
 
-        return parameterString;
+        return parameter.toArray(new String[parameter.size()]);
     }
 
     private Optional<Integer> getAvailablePort() {
@@ -451,10 +453,10 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         for (final Script script : scripts.get()) {
             List<String> command = new ArrayList<>();
 
-            Collections.addAll(command, bot.toParameterString().split(" "));
-            Collections.addAll(command, osBotAccount.toParameterString().split(" "));
-            Collections.addAll(command, this.toParameterString().split(" "));
-            Collections.addAll(command, script.toParameterString().split(" "));
+            Collections.addAll(command, bot.toParameter());
+            Collections.addAll(command, osBotAccount.toParameter());
+            Collections.addAll(command, this.toParameter());
+            Collections.addAll(command, script.toParameter());
 
             commands.add(command);
         }

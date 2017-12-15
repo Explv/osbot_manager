@@ -61,8 +61,8 @@ public final class RunescapeAccount extends Account implements BotParameter, Cop
     }
 
     @Override
-    public final String toParameterString() {
-        return String.format("-bot \"%s:%s:%d\"", getUsername(), getPassword(), pin.get());
+    public final String[] toParameter() {
+        return new String[] { "-bot", String.format("%s:%s:%d", getUsername(), getPassword(), pin.get()) };
     }
 
     @Override

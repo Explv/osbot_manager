@@ -12,8 +12,8 @@ public final class OSBotAccount extends Account implements BotParameter, Copyabl
     }
 
     @Override
-    public final String toParameterString() {
-        return String.format("-login \"%s:%s\"", getUsername(), getPassword());
+    public final String[] toParameter() {
+        return new String[]{ "-login", String.format("%s:%s", getUsername(), getPassword()) };
     }
 
     @Override

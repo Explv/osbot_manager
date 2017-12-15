@@ -50,8 +50,8 @@ public class SecuredProxy extends Proxy {
     }
 
     @Override
-    public final String toParameterString() {
-        return String.format("-proxy %s:%d:%s:%s", getIpAddress(), getPort(), username, password);
+    public final String[] toParameter() {
+        return new String[] { "-proxy", String.format("%s:%d:%s:%s", getIpAddress(), getPort(), username, password) };
     }
 
     @Override

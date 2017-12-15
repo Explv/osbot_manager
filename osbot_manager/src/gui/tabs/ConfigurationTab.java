@@ -196,7 +196,7 @@ public class ConfigurationTab extends TableTab<Configuration> {
 
         dialog.getDialogPane().setContent(anchorPane);
 
-        List<List<String>> configCommands = configuration.getCommands(botSettingsTab.getBot().getOsbotPath(), botSettingsTab.getOsBotAccount());
+        List<List<String>> configCommands = configuration.getCommands(botSettingsTab.getBot(), botSettingsTab.getOsBotAccount());
 
         for (List<String> command : configCommands) {
             textArea.appendText(String.join(" ", command) + "\n");
@@ -211,7 +211,7 @@ public class ConfigurationTab extends TableTab<Configuration> {
         new Thread(() -> {
             for (final Configuration configuration : configurations) {
                 try {
-                    configuration.run(botSettingsTab.getBot().getOsbotPath(), botSettingsTab.getOsBotAccount());
+                    configuration.run(botSettingsTab.getBot(), botSettingsTab.getOsBotAccount());
                     Thread.sleep(delay * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

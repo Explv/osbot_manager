@@ -2,6 +2,7 @@ package bot_parameters.configuration;
 
 import bot_parameters.account.OSBotAccount;
 import bot_parameters.account.RunescapeAccount;
+import bot_parameters.bot.Bot;
 import bot_parameters.interfaces.BotParameter;
 import bot_parameters.interfaces.Copyable;
 import bot_parameters.proxy.Proxy;
@@ -362,7 +363,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return configurationCopy;
     }
 
-    public void run(final String osbotPath, final OSBotAccount osBotAccount) throws IOException {
+    public void run(final Bot bot, final OSBotAccount osBotAccount) throws IOException {
 
         File logFile = new File(logFileName);
 
@@ -378,7 +379,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
             try (BufferedWriter br = new BufferedWriter(new FileWriter(logFile))) {
 
-                for (final List<String> command : getCommands(osbotPath, osBotAccount)) {
+                for (final List<String> command : getCommands(bot, osBotAccount)) {
 
                     final ProcessBuilder processBuilder = new ProcessBuilder(command);
                     processBuilder.redirectErrorStream(true);
@@ -443,14 +444,14 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         runThread.start();
     }
 
-    public List<List<String>> getCommands(final String osbotPath, final OSBotAccount osBotAccount) {
+    public List<List<String>> getCommands(final Bot bot, final OSBotAccount osBotAccount) {
 
         List<List<String>> commands = new ArrayList<>();
 
         for (final Script script : scripts.get()) {
             List<String> command = new ArrayList<>();
 
-            Collections.addAll(command, "java", "-jar", osbotPath);
+            Collections.addAll(command, bot.toParameterString().split(" "));
             Collections.addAll(command, osBotAccount.toParameterString().split(" "));
             Collections.addAll(command, this.toParameterString().split(" "));
             Collections.addAll(command, script.toParameterString().split(" "));

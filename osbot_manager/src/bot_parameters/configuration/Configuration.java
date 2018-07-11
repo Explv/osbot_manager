@@ -24,6 +24,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class Configuration implements BotParameter, Copyable<Configuration>, Serializable {
 
@@ -42,9 +43,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
     private SimpleBooleanProperty noRandoms = new SimpleBooleanProperty();
     private SimpleBooleanProperty noInterface = new SimpleBooleanProperty();
     private SimpleBooleanProperty noRender = new SimpleBooleanProperty();
-    private SimpleObjectProperty<WorldType> worldType = new SimpleObjectProperty<>();
-    private SimpleIntegerProperty world = new SimpleIntegerProperty(-1);
-    private SimpleBooleanProperty randomizeWorld = new SimpleBooleanProperty();
+    private SimpleListProperty<World> worlds = new SimpleListProperty<>(FXCollections.observableArrayList());
     private SimpleBooleanProperty isRunning = new SimpleBooleanProperty();
     private String logFileName;
 
@@ -109,17 +108,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return noRender.get();
     }
 
-    public final WorldType getWorldType() {
-        return worldType.get();
-    }
-
-    public final Integer getWorld() {
-        return world.get();
-    }
-
-    public boolean isRandomizeWorld() {
-        return randomizeWorld.get();
-    }
+    public final ObservableList<World> getWorlds() { return worlds.get(); }
 
     public final void setRunescapeAccount(final RunescapeAccount runescapeAccount) {
         this.runescapeAccount.set(runescapeAccount);
@@ -173,16 +162,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         this.noRender.set(noRender);
     }
 
-    public final void setWorldType(final WorldType worldType) {
-        this.worldType.set(worldType);
-    }
-
-    public final void setWorld(final Integer world) {
-        this.world.set(world);
-    }
-
-    public final void setRandomizeWorld(final boolean randomizeWorld) {
-        this.randomizeWorld.set(randomizeWorld);
+    public final void setWorlds(final List<World> worlds) {
+        this.worlds.setAll(worlds);
     }
 
     public final boolean isRunning() {
@@ -211,9 +192,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         stream.writeInt(getDebugPort());
         stream.writeBoolean(isLowCpuMode());
         stream.writeBoolean(isLowResourceMode());
-        stream.writeObject(getWorldType());
-        stream.writeInt(getWorld());
-        stream.writeBoolean(isRandomizeWorld());
+        stream.writeObject(new ArrayList<>(getWorlds()));
         stream.writeBoolean(isReflection());
         stream.writeBoolean(isNoRandoms());
         stream.writeBoolean(isNoInterface());
@@ -238,9 +217,19 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         debugPort = new SimpleIntegerProperty(stream.readInt());
         lowCpuMode = new SimpleBooleanProperty(stream.readBoolean());
         lowResourceMode = new SimpleBooleanProperty(stream.readBoolean());
-        worldType = new SimpleObjectProperty<>((WorldType) stream.readObject());
-        world = new SimpleIntegerProperty(stream.readInt());
-        randomizeWorld = new SimpleBooleanProperty(stream.readBoolean());
+
+        Object worldObj = stream.readObject();
+
+        // If old options are being used
+        if (worldObj instanceof WorldType) {
+            stream.readInt(); // world num
+            stream.readBoolean(); // randomize world
+            worlds = new SimpleListProperty<>(FXCollections.observableArrayList(World.getWorlds()));
+        } else {
+            List<World> selectedWorlds = (List<World>) worldObj;
+            worlds = new SimpleListProperty<>(FXCollections.observableArrayList(selectedWorlds));
+        }
+
         try {
             reflection = new SimpleBooleanProperty(stream.readBoolean());
             noRandoms = new SimpleBooleanProperty(stream.readBoolean());
@@ -319,16 +308,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
             Collections.addAll(parameter, "-allow",  String.join(",", allowParams));
         }
 
-        int worldVal;
-        if (randomizeWorld.get()) {
-            worldVal = worldType.get().worlds[new Random().nextInt(worldType.get().worlds.length)];
-        } else {
-            worldVal = world.get();
-        }
-
-        if (worldVal != -1) {
-            Collections.addAll(parameter, "-world", String.valueOf(worldVal));
-        }
+        World world = worlds.get(new Random().nextInt(worlds.size()));
+        Collections.addAll(parameter, world.toParameter());
 
         return parameter.toArray(new String[parameter.size()]);
     }
@@ -355,9 +336,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         configurationCopy.setDebugPort(getDebugPort());
         configurationCopy.setLowCpuMode(isLowCpuMode());
         configurationCopy.setLowResourceMode(isLowResourceMode());
-        configurationCopy.setWorldType(getWorldType());
-        configurationCopy.setWorld(getWorld());
-        configurationCopy.setRandomizeWorld(isRandomizeWorld());
+        configurationCopy.setWorlds(getWorlds());
         configurationCopy.setReflection(isReflection());
         configurationCopy.setNoRandoms(isNoRandoms());
         configurationCopy.setNoRender(isNoRender());

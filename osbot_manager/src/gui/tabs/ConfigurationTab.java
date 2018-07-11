@@ -54,14 +54,8 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, RunescapeAccount> accountCol = new TableColumn<>("Account");
         accountCol.setCellValueFactory(new PropertyValueFactory<>("runescapeAccount"));
 
-        TableColumn<Configuration, WorldType> worldTypeCol = new TableColumn<>("World Type");
-        worldTypeCol.setCellValueFactory(new PropertyValueFactory<>("worldType"));
-
-        TableColumn<Configuration, Boolean> randomWorldCol = new TableColumn<>("Random World");
-        randomWorldCol.setCellValueFactory(new PropertyValueFactory<>("randomizeWorld"));
-
-        TableColumn<Configuration, Integer> worldCol = new TableColumn<>("World");
-        worldCol.setCellValueFactory(new PropertyValueFactory<>("world"));
+        TableColumn<Configuration, Integer> worldCol = new TableColumn<>("Worlds");
+        worldCol.setCellValueFactory(new PropertyValueFactory<>("worlds"));
 
         TableColumn<Configuration, Proxy> proxyCol = new TableColumn<>("Proxy");
         proxyCol.setCellValueFactory(new PropertyValueFactory<>("proxy"));
@@ -96,7 +90,7 @@ public class ConfigurationTab extends TableTab<Configuration> {
         TableColumn<Configuration, Boolean> noRenderCol = new TableColumn<>("No Render");
         noRenderCol.setCellValueFactory(new PropertyValueFactory<>("noRender"));
 
-        getTableView().getColumns().addAll(scriptCol, accountCol, worldTypeCol, randomWorldCol, worldCol, proxyCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol, noRandomsCol, noInterfaceCol, noRenderCol);
+        getTableView().getColumns().addAll(scriptCol, accountCol, worldCol, proxyCol, memoryCol, collectDataCol, debugModeCol, debugPortCol, lowCpuCol, lowResCol, reflectionCol, noRandomsCol, noInterfaceCol, noRenderCol);
 
         getTableView().setRowFactory(param -> {
 

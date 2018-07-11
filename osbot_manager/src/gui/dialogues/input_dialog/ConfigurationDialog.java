@@ -2,17 +2,24 @@ package gui.dialogues.input_dialog;
 
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
+import bot_parameters.configuration.World;
 import bot_parameters.configuration.WorldType;
 import bot_parameters.proxy.Proxy;
 import bot_parameters.script.Script;
+import gui.dialogues.world_selector_dialog.WorldSelectorDialog;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public final class ConfigurationDialog extends InputDialog<Configuration> {
 
@@ -30,9 +37,8 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
     private final CheckBox noRandoms;
     private final CheckBox noInterface;
     private final CheckBox noRender;
-    private final ChoiceBox<WorldType> worldTypeSelector;
-    private final CheckBox randomizeWorld;
-    private final ChoiceBox<Integer> worldSelector;
+
+    private final WorldSelectorDialog worldSelectorDialog;
 
     public ConfigurationDialog(ObservableList<RunescapeAccount> accountList, ObservableList<Script> scriptList, ObservableList<Proxy> proxyList) {
 
@@ -71,16 +77,12 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         proxySelector = new ChoiceBox<>(proxyList);
         contentBox.getChildren().add(new FlowPane(10, 10, new Label("Proxy:"), proxySelector));
 
-        worldTypeSelector = new ChoiceBox<>(FXCollections.observableArrayList(WorldType.values()));
-        worldSelector = new ChoiceBox<>(FXCollections.observableArrayList(WorldType.F2P.worlds));
-        worldSelector.getSelectionModel().select(0);
-        worldTypeSelector.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            worldSelector.getItems().setAll(worldTypeSelector.getItems().get((Integer) newValue).worlds);
-            worldSelector.getSelectionModel().select(0);
+        final Button worldSelectorButton = new Button("World selector");
+        worldSelectorDialog = new WorldSelectorDialog();
+        worldSelectorButton.setOnAction(event -> {
+            worldSelectorDialog.showAndWait();
         });
-        randomizeWorld = new CheckBox("Randomize");
-        contentBox.getChildren().add(new FlowPane(10, 10, new Label("World Type: "), worldTypeSelector, randomizeWorld, new Label("World: "), worldSelector));
-
+        contentBox.getChildren().add(new FlowPane(10, 10, worldSelectorButton));
 
         memoryAllocation = new TextField();
         memoryAllocation.setPromptText("(Optional) Memory Allocation");
@@ -131,6 +133,10 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
                     selectedScripts.getItems().size() == 0);
         });
 
+        worldSelectorDialog.getSelectedWorlds().addListener((ListChangeListener<World>) c -> {
+            okButton.setDisable(worldSelectorDialog.getSelectedWorlds().isEmpty());
+        });
+
         Platform.runLater(accountSelector::requestFocus);
     }
 
@@ -148,9 +154,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
             lowCpuMode.setSelected(false);
             enableReflection.setSelected(false);
             noRandoms.setSelected(false);
-            worldTypeSelector.getSelectionModel().select(WorldType.F2P);
-            worldSelector.getSelectionModel().select(0);
-            randomizeWorld.setSelected(false);
+            worldSelectorDialog.clearSelectedWorlds();
             noInterface.setSelected(false);
             noRender.setSelected(false);
             return;
@@ -166,9 +170,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         lowCpuMode.setSelected(existingItem.isLowCpuMode());
         enableReflection.setSelected(existingItem.isReflection());
         noRandoms.setSelected(existingItem.isNoRandoms());
-        worldTypeSelector.getSelectionModel().select(existingItem.getWorldType());
-        worldSelector.getSelectionModel().select(existingItem.getWorld());
-        randomizeWorld.setSelected(existingItem.isRandomizeWorld());
+        worldSelectorDialog.setSelectedWorlds(existingItem.getWorlds());
         noInterface.setSelected(existingItem.isNoInterface());
         noRender.setSelected(existingItem.isNoRender());
         okButton.setDisable(accountSelector.getSelectionModel().getSelectedItem() == null || selectedScripts.getItems().size() == 0);
@@ -192,9 +194,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         configuration.setLowResourceMode(lowResourceMode.isSelected());
         configuration.setReflection(enableReflection.isSelected());
         configuration.setNoRandoms(noRandoms.isSelected());
-        configuration.setWorldType(worldTypeSelector.getValue());
-        configuration.setWorld(worldSelector.getValue());
-        configuration.setRandomizeWorld(randomizeWorld.isSelected());
+        configuration.setWorlds(new ArrayList<>(worldSelectorDialog.getSelectedWorlds()));
         configuration.setNoInterface(noInterface.isSelected());
         configuration.setNoRender(noRender.isSelected());
 
@@ -223,9 +223,7 @@ public final class ConfigurationDialog extends InputDialog<Configuration> {
         existingItem.setLowResourceMode(lowResourceMode.isSelected());
         existingItem.setReflection(enableReflection.isSelected());
         existingItem.setNoRandoms(noRandoms.isSelected());
-        existingItem.setWorldType(worldTypeSelector.getValue());
-        existingItem.setWorld(worldSelector.getValue());
-        existingItem.setRandomizeWorld(randomizeWorld.isSelected());
+        existingItem.setWorlds(new ArrayList<>(worldSelectorDialog.getSelectedWorlds()));
         existingItem.setNoInterface(noInterface.isSelected());
         existingItem.setNoRender(noRender.isSelected());
         return existingItem;

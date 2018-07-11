@@ -2,6 +2,7 @@ package gui.dialogues.world_selector_dialog;
 
 import bot_parameters.configuration.World;
 import bot_parameters.configuration.WorldType;
+import gui.dialogues.error_dialog.ExceptionDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -110,7 +111,18 @@ public class WorldSelectorDialog extends Dialog {
     }
 
     public void setSelectedWorlds(final ObservableList<World> selectedWorlds) {
-        this.selectedWorlds.setAll(selectedWorlds);
+        this.selectedWorlds.clear();
+
+        for (final World world : selectedWorlds) {
+            // We get the world from the list of latest worlds, in case the world detail has changed
+            int latestWorldIndex = allWorlds.indexOf(world);
+            if (latestWorldIndex == -1) {
+                continue;
+            } else {
+                this.selectedWorlds.add(allWorlds.get(latestWorldIndex));
+            }
+        }
+
         this.availableWorlds.setAll(allWorlds);
         this.availableWorlds.removeAll(selectedWorlds);
     }

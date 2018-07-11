@@ -7,6 +7,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,9 +29,9 @@ public class World implements BotParameter, Serializable {
         return Integer.compare(w1.getNumber(), w2.getNumber());
     };
 
-    private final WorldType type;
-    private final int number;
-    private final String detail;
+    private WorldType type;
+    private int number;
+    private String detail;
 
     public World(final WorldType type, final int number, final String detail) {
         this.type = type;
@@ -47,6 +49,29 @@ public class World implements BotParameter, Serializable {
 
     public final String getDetail() {
         return detail;
+    }
+
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(getType());
+        stream.writeInt(getNumber());
+        stream.writeObject(getDetail());
+    }
+
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        type = (WorldType) stream.readObject();
+        number = stream.readInt();
+        detail = (String) stream.readObject();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof World)) {
+            return false;
+        }
+
+        World otherWorld = (World) other;
+
+        return getType() == otherWorld.getType() && getNumber() == otherWorld.getNumber();
     }
 
     @Override

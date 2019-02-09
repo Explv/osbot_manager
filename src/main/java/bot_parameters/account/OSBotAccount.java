@@ -16,6 +16,6 @@ public final class OSBotAccount extends Account implements BotParameter {
 
     @Override
     public final String[] toParameter() {
-        return new String[]{ "-login", String.format("\"%s:%s\"", getUsername(), getPassword()) };
+        return new String[]{ "-login", String.format("%s:%s", getUsername(), getPassword()) };
     }
 }

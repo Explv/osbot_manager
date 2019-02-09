@@ -47,9 +47,6 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
 
     @Override
     public final String[] toParameter() {
-        if (isLocal.get()) {
-            return new String[] { "-script", String.format("\\\"%s\\\":%s", scriptIdentifier.get(), parameters.get()) };
-        }
         return new String[] { "-script", String.format("%s:%s", scriptIdentifier.get(), parameters.get()) };
     }
 

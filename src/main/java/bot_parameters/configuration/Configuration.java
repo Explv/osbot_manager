@@ -398,7 +398,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
                                 Platform.runLater(() -> new ExceptionDialog(new IncorrectLoginException()).show());
                                 setRunning(false);
                                 return;
-                            } else if (outputLine.contains("OSBot is now ready!")) {
+                            } else if (outputLine.contains("Successfully loaded OSBot")) {
                                 List<Integer> newJavaPIDs = getJavaPIDs();
                                 newJavaPIDs.removeAll(javaPIDs);
 

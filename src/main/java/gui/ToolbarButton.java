@@ -11,8 +11,8 @@ public class ToolbarButton extends Button {
 
     public ToolbarButton(final String text, final String imageName, final String hoverImageName) {
         super(text);
-        imageView = new ImageView(new Image(getClass().getResourceAsStream("/resources/" + imageName)));
-        hoverImageView = new ImageView(new Image(getClass().getResourceAsStream("/resources/" + hoverImageName)));
+        imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + imageName)));
+        hoverImageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + hoverImageName)));
         setGraphic(imageView);
         setContentDisplay(ContentDisplay.TOP);
         setMnemonicParsing(false);

@@ -2,9 +2,9 @@ package gui.tabs;
 
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
-import bot_parameters.configuration.WorldType;
 import bot_parameters.proxy.Proxy;
 import bot_parameters.script.Script;
+import osbot_client.OSBotClient;
 import gui.ToolbarButton;
 import gui.dialogues.error_dialog.ExceptionDialog;
 import gui.dialogues.input_dialog.ConfigurationDialog;
@@ -190,7 +190,7 @@ public class ConfigurationTab extends TableTab<Configuration> {
 
         dialog.getDialogPane().setContent(anchorPane);
 
-        List<List<String>> configCommands = configuration.getCommands(botSettingsTab.getBot(), botSettingsTab.getOsBotAccount());
+        List<List<String>> configCommands = configuration.getCommands();
 
         for (List<String> command : configCommands) {
             textArea.appendText(String.join(" ", command) + "\n");
@@ -202,10 +202,17 @@ public class ConfigurationTab extends TableTab<Configuration> {
     private void runConfigurations(final List<Configuration> configurations) {
         final int delay = configurations.size() > 1 ? getDelayFromUser() : 0;
 
+        if (OSBotClient.isUpdateRequired()) {
+            if (!OSBotClient.download()) {
+                System.out.print("Oops");
+                return;
+            }
+        }
+
         new Thread(() -> {
             for (final Configuration configuration : configurations) {
                 try {
-                    configuration.run(botSettingsTab.getBot(), botSettingsTab.getOsBotAccount());
+                    configuration.run();
                     Thread.sleep(delay * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

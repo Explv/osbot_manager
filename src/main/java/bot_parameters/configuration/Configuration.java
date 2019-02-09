@@ -2,7 +2,6 @@ package bot_parameters.configuration;
 
 import bot_parameters.account.OSBotAccount;
 import bot_parameters.account.RunescapeAccount;
-import bot_parameters.bot.Bot;
 import bot_parameters.interfaces.BotParameter;
 import bot_parameters.interfaces.Copyable;
 import bot_parameters.proxy.Proxy;
@@ -10,6 +9,7 @@ import bot_parameters.script.Script;
 import exceptions.ClientOutOfDateException;
 import exceptions.IncorrectLoginException;
 import exceptions.MissingWebWalkDataException;
+import osbot_client.OSBotClient;
 import gui.dialogues.error_dialog.ExceptionDialog;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -19,12 +19,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import settings.Settings;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class Configuration implements BotParameter, Copyable<Configuration>, Serializable {
 
@@ -53,7 +53,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         this.runescapeAccount = new SimpleObjectProperty<>(runescapeAccount);
         this.scripts = new SimpleListProperty<>(scripts);
         this.proxy = new SimpleObjectProperty<>();
-        logFileName = Paths.get(System.getProperty("user.home"), "ExplvOSBotManager", "Logs", UUID.randomUUID().toString()).toString();
+        logFileName = Paths.get(Settings.LOGS_DIR, UUID.randomUUID().toString()).toString();
     }
 
     public RunescapeAccount getRunescapeAccount() {
@@ -344,7 +344,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         return configurationCopy;
     }
 
-    public void run(final Bot bot, final OSBotAccount osBotAccount) throws IOException {
+    public void run() throws IOException {
 
         File logFile = new File(logFileName);
 
@@ -360,7 +360,7 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
             try (BufferedWriter br = new BufferedWriter(new FileWriter(logFile))) {
 
-                for (final List<String> command : getCommands(bot, osBotAccount)) {
+                for (final List<String> command : getCommands()) {
 
                     final ProcessBuilder processBuilder = new ProcessBuilder(command);
                     processBuilder.redirectErrorStream(true);
@@ -425,15 +425,15 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         runThread.start();
     }
 
-    public List<List<String>> getCommands(final Bot bot, final OSBotAccount osBotAccount) {
+    public List<List<String>> getCommands() {
 
         List<List<String>> commands = new ArrayList<>();
 
         for (final Script script : scripts.get()) {
             List<String> command = new ArrayList<>();
 
-            Collections.addAll(command, bot.toParameter());
-            Collections.addAll(command, osBotAccount.toParameter());
+            Collections.addAll(command, "java", "-jar", OSBotClient.getLatestLocalVersion().get());
+            Collections.addAll(command, OSBotAccount.getInstance().toParameter());
             Collections.addAll(command, this.toParameter());
             Collections.addAll(command, script.toParameter());
 

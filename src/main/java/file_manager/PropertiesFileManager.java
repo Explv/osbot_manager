@@ -27,11 +27,10 @@ public class PropertiesFileManager {
         return Optional.empty();
     }
 
-    public static void setOSBotProperties(final String osbotPath, final String username, final String password) {
+    public static void setOSBotProperties(final String username, final String password) {
         try {
             FileOutputStream out = new FileOutputStream(propertiesFileName);
             Properties osbotAccountProperties = new Properties();
-            osbotAccountProperties.setProperty("path", osbotPath);
             osbotAccountProperties.setProperty("username", username);
             osbotAccountProperties.setProperty("password", password);
             osbotAccountProperties.store(out, "");

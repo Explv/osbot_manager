@@ -1,5 +1,6 @@
 package gui;
 
+import bot_parameters.account.OSBotAccount;
 import bot_parameters.account.RunescapeAccount;
 import bot_parameters.configuration.Configuration;
 import bot_parameters.proxy.Proxy;
@@ -78,9 +79,10 @@ public class ManagerPane extends BorderPane {
             objects.addAll(scriptTab.getTableView().getItems());
             objects.addAll(runTab.getTableView().getItems());
             SettingsFileManager.saveSettings(objects);
-            PropertiesFileManager.setOSBotProperties(botSettingsTab.getBot().getOsbotPath(),
-                    botSettingsTab.getOsBotAccount().getUsername(),
-                    botSettingsTab.getOsBotAccount().getPassword());
+            PropertiesFileManager.setOSBotProperties(
+                    OSBotAccount.getInstance().getUsername(),
+                    OSBotAccount.getInstance().getPassword()
+            );
         });
 
         loadButton.setOnAction(event -> {
@@ -102,9 +104,6 @@ public class ManagerPane extends BorderPane {
         });
 
         PropertiesFileManager.getOSBotProperties().ifPresent(properties -> {
-            if(properties.containsKey("path")) {
-                botSettingsTab.setOsbotPath(properties.getProperty("path"));
-            }
             if(properties.containsKey("username")) {
                 botSettingsTab.setOsbotUsername(properties.getProperty("username"));
             }

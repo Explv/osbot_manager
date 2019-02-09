@@ -2,7 +2,6 @@ package gui.dialogues.world_selector_dialog;
 
 import bot_parameters.configuration.World;
 import bot_parameters.configuration.WorldType;
-import gui.dialogues.error_dialog.ExceptionDialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -106,7 +105,7 @@ public class WorldSelectorDialog extends Dialog {
             okButton.setDisable(selectedWorldsListView.getItems().isEmpty());
         });
 
-        getDialogPane().getStylesheets().add("style/dialog.css");
+        getDialogPane().getStylesheets().add("/css/dialog.css");
         getDialogPane().getStyleClass().add("custom-dialog");
     }
 

@@ -25,7 +25,7 @@ public abstract class InputDialog<T> extends Dialog<T> {
             if(existingItem != null) return onEdit(existingItem);
             return onAdd();
         });
-        getDialogPane().getStylesheets().add("style/dialog.css");
+        getDialogPane().getStylesheets().add("/css/dialog.css");
         getDialogPane().getStyleClass().add("custom-dialog");
     }
 

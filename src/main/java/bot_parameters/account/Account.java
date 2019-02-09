@@ -13,6 +13,8 @@ public abstract class Account implements Serializable {
 
     protected SimpleStringProperty username, password;
 
+    public Account() {}
+
     public Account(final String username, final String password) {
         this.username = new SimpleStringProperty(username);
         this.password = new SimpleStringProperty(password);

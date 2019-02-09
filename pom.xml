@@ -6,7 +6,7 @@
 
     <groupId>org.explv.explv_osbot_manager</groupId>
     <artifactId>explv_osbot_manager</artifactId>
-    <version>8.3</version>
+    <version>v2.0.0</version>
     <repositories>
         <repository>
             <id>local-repo</id>

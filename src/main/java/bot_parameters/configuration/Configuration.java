@@ -432,7 +432,8 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         for (final Script script : scripts.get()) {
             List<String> command = new ArrayList<>();
 
-            Collections.addAll(command, "java", "-jar", OSBotClient.getLatestLocalVersion().get());
+            Collections.addAll(command, "java", "-jar");
+            Collections.addAll(command, Paths.get(Settings.OSBOT_CLIENT_DIR, OSBotClient.getLatestLocalVersion().get()).toString());
             Collections.addAll(command, OSBotAccount.getInstance().toParameter());
             Collections.addAll(command, this.toParameter());
             Collections.addAll(command, script.toParameter());

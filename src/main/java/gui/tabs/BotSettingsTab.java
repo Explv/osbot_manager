@@ -50,9 +50,11 @@ public class BotSettingsTab extends Tab {
 
     public void setOsbotUsername(final String username) {
         usernameField.setText(username);
+        OSBotAccount.getInstance().setUsername(username);
     }
 
     public void setOsbotPassword(final String password) {
         passwordField.setText(password);
+        OSBotAccount.getInstance().setPassword(password);
     }
 }

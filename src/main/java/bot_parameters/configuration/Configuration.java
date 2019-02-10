@@ -252,8 +252,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
         }
         try {
             logFileName = (String) stream.readObject();
+            File logFile = new File(logFileName);
+            if (!logFile.exists()) {
+                logFileName = Paths.get(Settings.LOGS_DIR, UUID.randomUUID().toString()).toString();
+            }
         } catch (Exception e) {
-            logFileName = Paths.get(System.getProperty("user.home"), "ExplvOSBotManager", "Logs", UUID.randomUUID().toString()).toString();
+            logFileName = Paths.get(Settings.LOGS_DIR, UUID.randomUUID().toString()).toString();
         }
         isRunning = new SimpleBooleanProperty();
     }
@@ -354,6 +358,12 @@ public final class Configuration implements BotParameter, Copyable<Configuration
 
         if (!logFile.exists() && !logFile.createNewFile()) {
             throw new IllegalStateException("Could not create log file");
+        }
+
+        OSBotAccount osBotAccount = OSBotAccount.getInstance();
+
+        if (osBotAccount.getUsername().trim().isEmpty() || osBotAccount.getPassword().isEmpty()) {
+            Platform.runLater(() -> new ExceptionDialog(new Exception("OSBot account username or password is empty!")).show());
         }
 
         Thread runThread = new Thread(() -> {

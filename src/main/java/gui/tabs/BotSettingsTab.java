@@ -39,11 +39,11 @@ public class BotSettingsTab extends Tab {
 
         setContent(gridPane);
 
-        usernameField.setOnKeyTyped(event -> {
-            OSBotAccount.getInstance().setUsername(usernameField.getText());
+        usernameField.setOnKeyReleased(event -> {
+            OSBotAccount.getInstance().setUsername(usernameField.getText().trim());
         });
 
-        passwordField.setOnKeyTyped(event -> {
+        passwordField.setOnKeyReleased(event -> {
             OSBotAccount.getInstance().setPassword(passwordField.getText());
         });
     }

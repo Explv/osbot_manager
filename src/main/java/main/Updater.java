@@ -52,13 +52,18 @@ public class Updater {
     }
 
     public static boolean isUpdateRequired() {
-        String currentVersion = Updater.class.getPackage().getImplementationVersion();
-        return !currentVersion.equals(latestReleaseJSON.get("tag_name"));
+        String currentVersion = ExplvOSBotManager.getVersion();
+
+        if (currentVersion.isEmpty()) {
+            return false;
+        }
+
+        return currentVersion.compareTo((String) latestReleaseJSON.get("tag_name")) < 0;
     }
 
     public static void update() {
         Dialog updateDialog = new Dialog();
-        updateDialog.setTitle("Explv's OSBot Manager");
+        updateDialog.setTitle("Explv's OSBot Manager " + ExplvOSBotManager.getVersion());
         updateDialog.setHeaderText("Updating");
         updateDialog.show();
 
@@ -66,7 +71,7 @@ public class Updater {
             updateDialog.close();
 
             Dialog errorDialog = new Dialog();
-            errorDialog.setTitle("Explv's OSBot Manager");
+            errorDialog.setTitle("Explv's OSBot Manager " + ExplvOSBotManager.getVersion());
             errorDialog.setHeaderText("Error!");
             errorDialog.setContentText("Failed to download latest version");
             errorDialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);

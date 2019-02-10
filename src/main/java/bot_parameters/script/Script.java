@@ -47,7 +47,11 @@ public final class Script implements BotParameter, Copyable<Script>, Serializabl
 
     @Override
     public final String[] toParameter() {
-        return new String[] { "-script", String.format("%s:%s", scriptIdentifier.get(), parameters.get()) };
+        if (isLocal()) {
+            return new String[]{"-script", String.format("\\\"%s\\\":\\\"%s\\\"", scriptIdentifier.get(), parameters.get())};
+        } else {
+            return new String[]{"-script", String.format("%s:\\\"%s\\\"", scriptIdentifier.get(), parameters.get())};
+        }
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {

@@ -16,6 +16,19 @@ public class Settings {
         makeDirs(LOGS_DIR);
         makeDirs(OSBOT_CLIENT_DIR);
         makeDirs(TEMP_DIR);
+
+        File oldConfigDir = Paths.get(System.getProperty("user.home"), "ExplvOSBotManager", "Configurations").toFile();
+        if (oldConfigDir.exists()) {
+            File[] configFiles = oldConfigDir.listFiles();
+
+            if (configFiles != null) {
+                System.out.println("Moving old config files");
+
+                for (File configFile : configFiles) {
+                    configFile.renameTo(Paths.get(CONFIG_DIR, configFile.getName()).toFile());
+                }
+            }
+        }
     }
 
     private static boolean makeDirs(final String dir) {

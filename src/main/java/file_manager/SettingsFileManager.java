@@ -2,9 +2,9 @@ package file_manager;
 
 import gui.dialogues.error_dialog.ExceptionDialog;
 import javafx.stage.FileChooser;
+import settings.Settings;
 
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +64,7 @@ public final class SettingsFileManager {
         fileChooser.setTitle("Explv's OSBot Manager");
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Config files (*.config)", "*.config");
         fileChooser.getExtensionFilters().add(extensionFilter);
-        fileChooser.setInitialDirectory(Paths.get(System.getProperty("user.home"), "ExplvOSBotManager", "Configurations").toFile());
+        fileChooser.setInitialDirectory(new File(Settings.CONFIG_DIR));
         return fileChooser;
     }
 }

@@ -1,5 +1,7 @@
 package file_manager;
 
+import settings.Settings;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,7 +12,7 @@ import java.util.Properties;
 
 public class PropertiesFileManager {
 
-    private static final String propertiesFileName = Paths.get(System.getProperty("user.home"), "ExplvOSBotManager", "osbotAccountProperties").toString();
+    private static final String propertiesFileName = Paths.get(Settings.STORAGE_DIR, "osbotAccountProperties").toString();
 
     public static Optional<Properties> getOSBotProperties() {
         try {

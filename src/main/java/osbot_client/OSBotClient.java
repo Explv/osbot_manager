@@ -67,7 +67,7 @@ public class OSBotClient {
             FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
             fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-            OSBotClient.latestLocalVersion = outputFile.toString();
+            OSBotClient.latestLocalVersion = filename.get();
 
             return true;
         } catch (IOException e) {

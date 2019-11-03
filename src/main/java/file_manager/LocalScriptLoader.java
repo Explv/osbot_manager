@@ -42,6 +42,7 @@ public final class LocalScriptLoader {
     }
 
     private void addScriptsFromJar(final JarFile jarFile, final ClassLoader classLoader, final List<Script> localScripts) {
+        System.out.println(String.format("Loading jar: '%s'", jarFile.getName()));
         Enumeration entries = jarFile.entries();
         while (entries.hasMoreElements()) {
             JarEntry entry = (JarEntry) entries.nextElement();
@@ -59,7 +60,7 @@ public final class LocalScriptLoader {
             if (scriptManifest != null) {
                 return Optional.of(new Script(((ScriptManifest) scriptManifest).name(), "", true));
             }
-        } catch (ClassNotFoundException ignored) {}
+        } catch (Exception | NoClassDefFoundError ignored) {}
         return Optional.empty();
     }
 }
